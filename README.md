@@ -91,7 +91,7 @@ python train_model.py
 
 ## 📬 Contact
 
-Created by **Deeksha R H** – feel free to reach out!
+Created by **DeekshaRH** – feel free to reach out!
 
 ---
 
