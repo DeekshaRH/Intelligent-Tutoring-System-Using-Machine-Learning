@@ -1,0 +1,160 @@
+{% extends "education_tutor/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2><i class="fas fa-graduation-cap"></i> Menu</h2>
+            <ul>
+                <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{% url 'quiz_results' %}" class="active"><i class="fas fa-chart-bar"></i> Results</a></li>
+                <li><a href="{% url 'performance' %}"><i class="fas fa-chart-line"></i> Performance</a></li>
+                <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Your Quiz Results</h2>
+
+            {% if quiz_results %}
+                <div class="results-container">
+                    <table>
+                        <tr>
+                            <th>Language</th>
+                            <th>Score</th>
+                            <th>Level</th>
+                            <th>Roadmap</th>
+                        </tr>
+                        {% for result in quiz_results %}
+                            <tr>
+                                <td>{{ result.language.name }}</td>
+                                <td>{{ result.score }}/15</td>
+                                <td>{{ result.level }}</td>
+                                <td>
+                                    <a href="{% url 'roadmap' result.language.id result.level %}">View Roadmap</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                <p><a href="{% url 'performance' %}">View Performance Graphs</a></p>
+            {% else %}
+                <p class="no-results">No quiz results found. Take a quiz to see your scores!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <style>
+        /* General Layout */
+        .container {
+            display: flex;
+        }
+
+        body {
+            background-color: #f0f2f5;
+        }
+
+        /* Sidebar Styling (Same as dashboard) */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #4A90E2, #357ABD);
+            color: white;
+            padding-top: 30px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 8px;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 240px;
+            padding: 40px;
+            width: calc(100% - 240px);
+        }
+
+        /* Results Styling */
+        .results-container {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background: #4A90E2;
+            color: white;
+            font-size: 18px;
+        }
+
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+
+        .no-results {
+            color: red;
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+{% endblock %}

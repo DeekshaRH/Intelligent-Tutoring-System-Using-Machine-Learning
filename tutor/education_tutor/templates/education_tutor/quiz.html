@@ -1,0 +1,75 @@
+{% extends "education_tutor/base.html" %}
+
+{% block content %}
+    <h2 style="color: #4A90E2;">{{ language.name }} Quiz</h2>
+
+    <!-- Timer Display -->
+    <p id="timer" style="font-weight: bold; color: red;">Time Left: 10:00</p>
+
+    <form id="quiz-form" method="POST" action="{% url 'submit_quiz' language.id %}" 
+          style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);">
+        {% csrf_token %}
+        
+        {% for question in questions %}
+            <fieldset style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <legend style="font-weight: bold;">{{ question.text }}</legend>
+                <label style="display: block; margin: 5px 0;">
+                    <input type="radio" name="{{ question.id }}" value="{{ question.option1 }}"> {{ question.option1 }}
+                </label>
+                <label style="display: block; margin: 5px 0;">
+                    <input type="radio" name="{{ question.id }}" value="{{ question.option2 }}"> {{ question.option2 }}
+                </label>
+                <label style="display: block; margin: 5px 0;">
+                    <input type="radio" name="{{ question.id }}" value="{{ question.option3 }}"> {{ question.option3 }}
+                </label>
+                <label style="display: block; margin: 5px 0;">
+                    <input type="radio" name="{{ question.id }}" value="{{ question.option4 }}"> {{ question.option4 }}
+                </label>
+            </fieldset>
+        {% endfor %}
+
+        <button type="submit" style="background-color: #4A90E2; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer;">
+            Submit Quiz
+        </button>
+
+        <!-- Back Button -->
+        <button type="button" onclick="confirmExit()" 
+                style="background-color: #ff4757; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-left: 10px;">
+            Quit Quiz
+        </button>
+    </form>
+
+    <!-- JavaScript for Timer and Quit Confirmation -->
+    <script>
+        let timeLeft = 10 * 60; // 10 minutes in seconds
+        const timerDisplay = document.getElementById('timer');
+        const quizForm = document.getElementById('quiz-form');
+
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            if (timeLeft === 30) {
+                alert("⚠ Warning: Only 30 seconds left!");
+            }
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("⏳ Time's up! Submitting your quiz...");
+                quizForm.submit();
+            }
+            timeLeft--;
+        }
+
+        // Update timer every second
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        function confirmExit() {
+            let confirmQuit = confirm("Are you sure you want to quit the quiz? Your progress will be lost.");
+            if (confirmQuit) {
+                window.location.href = "{% url 'dashboard' %}";
+            }
+        }
+    </script>
+{% endblock %}

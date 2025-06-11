@@ -1,0 +1,281 @@
+{% extends "education_tutor/base.html" %}
+
+{% block content %}
+<div class="login-container">
+    <h1>Intelligent Tutoring System</h1>
+    <div class="form-container">
+        <h2>Login</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <p>
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <span class="error">{{ field.errors }}</span>
+                    {% endif %}
+                </p>
+            {% endfor %}
+            <button type="submit">Login</button>
+            <p>Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+        </form>
+    </div>
+</div>
+
+<!-- Cartoon Tutor Bottom Right -->
+<div class="tutor-box">
+    <div class="speech-bubble">
+        Welcome to the Intelligent Tutoring System!<br>
+        Assess your understanding of programming languages through quizzes and learn accordingly.
+    </div>
+    <img src="https://cdn-icons-png.flaticon.com/512/4140/4140047.png" alt="Tutor" class="tutor-image">
+</div>
+
+<!-- Particle.js Background -->
+<div id="particles-js"></div>
+
+<style>
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100vh !important;
+        width: 100vw !important;
+        overflow: hidden !important;
+        position: relative;
+    }
+
+    .login-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        background: #4A90E2;
+        z-index: 1;
+    }
+
+    h1 {
+        font-size: 3rem;
+        color: #fff;
+        text-align: center;
+        margin: 20px 0;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        animation: fadeInDown 1s ease-in-out;
+    }
+
+    .form-container {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        max-width: 400px;
+        width: 100%;
+        text-align: left;
+        animation: fadeInUp 0.8s ease-in-out;
+        z-index: 2;
+    }
+
+    .form-container h2 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 20px;
+        position: relative;
+        font-weight: 600;
+    }
+
+    .form-container h2::after {
+        content: '';
+        width: 40px;
+        height: 2px;
+        background: #4A90E2;
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        border-radius: 2px;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 5px;
+    }
+
+    .form-container input:focus {
+        border-color: #4A90E2;
+        outline: none;
+    }
+
+    .form-container label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .error {
+        color: #ff4d4d;
+        font-size: 14px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .form-container button {
+        width: 100%;
+        padding: 12px;
+        background: #4A90E2;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    .form-container button:hover {
+        background: #357ABD;
+    }
+
+    .form-container p {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .form-container p a {
+        color: #4A90E2;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .form-container p a:hover {
+        text-decoration: underline;
+        color: #357ABD;
+    }
+
+    #particles-js {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: #4A90E2;
+    }
+
+    .tutor-box {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        z-index: 2;
+    }
+
+    .tutor-image {
+        max-width: 160px;
+        height: auto;
+    }
+
+    .speech-bubble {
+        background-color: white;
+        color: #333;
+        padding: 16px 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        font-size: 16px;
+        max-width: 300px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .speech-bubble::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        right: 20px;
+        width: 0;
+        height: 0;
+        border-top: 10px solid white;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+        h1 { font-size: 2rem; }
+        .form-container { padding: 20px; max-width: 90%; }
+        .form-container h2 { font-size: 1.3rem; }
+        .form-container input,
+        .form-container button { font-size: 14px; }
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (typeof particlesJS !== "undefined") {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": { "enable": true, "value_area": 800 }
+                    },
+                    "color": { "value": "#ffffff" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.5, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "out_mode": "out"
+                    }
+                },
+                "interactivity": {
+                    "events": {
+                        "onhover": { "enable": true, "mode": "repulse" },
+                        "onclick": { "enable": true, "mode": "push" },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": { "distance": 400 },
+                        "bubble": { "distance": 400, "size": 40 },
+                        "repulse": { "distance": 200 },
+                        "push": { "particles_nb": 4 },
+                        "remove": { "particles_nb": 2 }
+                    }
+                },
+                "retina_detect": true
+            });
+        } else {
+            console.error("particles.js not loaded.");
+        }
+    });
+</script>
+{% endblock %}

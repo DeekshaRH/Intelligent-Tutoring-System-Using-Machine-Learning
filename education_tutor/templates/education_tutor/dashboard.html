@@ -1,0 +1,161 @@
+{% extends "education_tutor/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2><i class="fas fa-graduation-cap"></i> Menu</h2>
+            <ul>
+                <li><a href="{% url 'dashboard' %}" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="{% url 'quiz_results' %}"><i class="fas fa-chart-bar"></i> Results</a></li>
+                <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Profile -->
+            <div class="profile-section">
+                <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=4A90E2&color=fff&rounded=true&size=80" alt="Profile Picture">
+                <div class="greeting">
+                    <h2>Welcome, {{ user.username }} 👋</h2>
+                    <p>Ready to sharpen your skills?</p>
+                </div>
+            </div>
+
+            <!-- Language Grid -->
+            <div class="language-container">
+                {% for language in languages %}
+                    <div class="language-card">
+                        <a href="{% url 'start_quiz' language.id %}">
+                            <i class="fas fa-code fa-2x"></i>
+                            <div class="language-name">{{ language.name }}</div>
+                          
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: linear-gradient(180deg, #4A90E2, #357ABD);
+            color: white;
+            padding-top: 30px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li a i {
+            margin-right: 8px;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            padding: 40px;
+            width: calc(100% - 240px);
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-section img {
+            border-radius: 50%;
+            margin-right: 20px;
+        }
+
+        .greeting h2 {
+            font-size: 26px;
+            margin: 0;
+        }
+
+        .greeting p {
+            color: #777;
+            margin: 4px 0 0;
+        }
+
+        .language-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .language-card {
+            background: #ffffff;
+            color: #333;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .language-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        .language-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .language-card i {
+            margin-bottom: 10px;
+            color: #4A90E2;
+        }
+
+    </style>
+{% endblock %}

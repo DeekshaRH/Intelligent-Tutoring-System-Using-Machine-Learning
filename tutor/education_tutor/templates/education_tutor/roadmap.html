@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ language.name }} Roadmap - {{ level }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .roadmap {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            width: 100%;
+            margin: 20px;
+        }
+
+        .roadmap h2 {
+            color: #1e3c72;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #1e3c72;
+            padding-bottom: 10px;
+        }
+
+        .roadmap ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .roadmap ul li {
+            background: #f4f4f4;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .roadmap ul li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .roadmap ul li strong {
+            color: #1e3c72;
+            margin-left: 10px;
+        }
+
+        /* Circular Icon */
+        .step-icon {
+            width: 25px;
+            height: 25px;
+            background: #1e3c72; /* Default Color */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        /* Completed Step Color */
+        .step-icon.completed {
+            background-color: green !important; /* Change to Green */
+        }
+
+        .back-link {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-link a {
+            color: #fff;
+            font-size: 1.2rem;
+            text-decoration: none;
+            background: #1e3c72;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .back-link a:hover {
+            background: #163a63;
+        }
+
+        /* Active Link Style */
+        .completed-link {
+            text-decoration: none;
+            color: green;
+            font-weight: bold;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>{{ language.name }} Roadmap - {{ level }}</h1>
+    
+    <div class="roadmap">
+        <h2>Step-by-Step Guide</h2>
+        <ul>
+            {% if roadmap %}
+                {% for step in roadmap %}
+                    <li>
+                        <div class="step-icon" id="step-{{ step.day }}">{{ step.day }}</div> 
+                        <strong>{{ step.icon }} {{ step.topic }}</strong>
+                        {% if step.link %}
+                            <a href="{{ step.link }}" target="_blank" class="step-link" onclick="trackTime('{{ step.day }}', this)">Learn More</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p>No roadmap available for this level.</p>
+            {% endif %}
+        </ul>
+    </div>
+
+    <div class="back-link">
+        <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+    </div>
+
+    <script>
+        // Function to track time and mark the step as completed after 5 minutes
+        function trackTime(stepDay, linkElement) {
+            let key = "step_" + stepDay;
+            localStorage.setItem(key, Date.now()); // Save start time
+
+            // Change the link style to indicate it has been clicked
+            linkElement.classList.add("completed-link");
+
+            // Check every second (1000 ms) if 5 minutes have passed
+            let checkInterval = setInterval(() => {
+                let startTime = localStorage.getItem(key);
+                if (startTime && (Date.now() - startTime) >= 300000) { // 5 minutes (300000 ms)
+                    document.getElementById("step-" + stepDay).classList.add("completed");
+                    clearInterval(checkInterval); // Stop checking once it's completed
+                    checkAllStepsCompleted(); // Check if all steps are completed
+                }
+            }, 1000); // Check every second
+        }
+
+        // Function to check if all steps are completed
+        function checkAllStepsCompleted() {
+            let allCompleted = true;
+
+            // Check each step if it's completed (green color)
+            document.querySelectorAll('.step-icon').forEach(stepIcon => {
+                if (!stepIcon.classList.contains('completed')) {
+                    allCompleted = false;
+                }
+            });
+
+            // If all steps are completed, redirect to quiz template
+            if (allCompleted) {
+                setTimeout(() => {
+                    window.location.href = "{% url 'quiz_template' %}";  // Adjust with the correct URL
+                }, 2000);  // Redirect after 2 seconds for better UX
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+/* General styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+/* Form container */
+.form-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form header */
+.form-container h2 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #333;
+    font-weight: 600;
+    position: relative;
+}
+
+.form-container h2::after {
+    content: '';
+    width: 50px;
+    height: 4px;
+    background-color: #6a11cb;
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* Form fields */
+.form-container p {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+    text-align: left;
+}
+
+.form-container input[type="text"],
+.form-container input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.form-container input[type="text"]:focus,
+.form-container input[type="password"]:focus {
+    border-color: #6a11cb;
+    outline: none;
+}
+
+/* Form button */
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+}
+
+/* Link styles */
+.form-container p a {
+    color: #2575fc;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.form-container p a:hover {
+    color: #6a11cb;
+    text-decoration: underline;
+}
+
+/* Additional decorative elements */
+.form-container::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-radius: 50%;
+    z-index: -1;
+    animation: float 4s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(-50%, 0);
+    }
+    50% {
+        transform: translate(-50%, -10px);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 20px;
+    }
+
+    .form-container h2 {
+        font-size: 24px;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="password"] {
+        padding: 10px;
+    }
+
+    .form-container button {
+        padding: 10px;
+    }
+}
+/* Language List Styles */
+.language-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.language-list h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.language-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.language-list ul li {
+    margin-bottom: 10px;
+}
+
+.language-list ul li a {
+    text-decoration: none;
+    color: #2575fc;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.language-list ul li a:hover {
+    color: #6a11cb;
+    text-decoration: underline;
+}
+
+/* Logout Button */
+.logout-button {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logout-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+}

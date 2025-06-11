@@ -1,0 +1,122 @@
+{% extends "education_tutor/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="{% url 'dashboard' %}" class="active">Dashboard</a></li>
+                <li><a href="{% url 'quiz_results' %}">Results</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2>Welcome, {{ user.username }}!</h2>
+            <p>Choose a programming language to start the quiz:</p>
+
+            <div class="language-container">
+                {% for language in languages %}
+                    <div class="language-card">
+                        <a href="{% url 'start_quiz' language.id %}">
+                            {{ language.name }}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Main container layout */
+        .container {
+            display: flex;
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #4A90E2;
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 12px;
+            text-align: center;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a.active {
+            background: #357ABD;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Main content area */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* Grid layout for language cards */
+        .language-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            justify-content: center;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        /* Language cards */
+        .language-card {
+            background-color: #4A90E2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .language-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-card a {
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+    </style>
+{% endblock %}

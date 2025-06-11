@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .options label {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .options input[type="radio"]:checked + label {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h2>{{ language_name }} Quiz</h2>
+        <form id="quizForm">
+            {% for question in questions %}
+                <div class="question">
+                    <p><strong>{{ question.text }}</strong></p>
+                    <input type="hidden" name="correct_{{ forloop.counter }}" value="{{ question.correct_option }}">
+                    <div class="options">
+                        <input type="radio" id="option1_{{ forloop.counter }}" name="q{{ forloop.counter }}" value="{{ question.option1 }}">
+                        <label for="option1_{{ forloop.counter }}">{{ question.option1 }}</label>
+
+                        <input type="radio" id="option2_{{ forloop.counter }}" name="q{{ forloop.counter }}" value="{{ question.option2 }}">
+                        <label for="option2_{{ forloop.counter }}">{{ question.option2 }}</label>
+
+                        <input type="radio" id="option3_{{ forloop.counter }}" name="q{{ forloop.counter }}" value="{{ question.option3 }}">
+                        <label for="option3_{{ forloop.counter }}">{{ question.option3 }}</label>
+
+                        <input type="radio" id="option4_{{ forloop.counter }}" name="q{{ forloop.counter }}" value="{{ question.option4 }}">
+                        <label for="option4_{{ forloop.counter }}">{{ question.option4 }}</label>
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="button" onclick="checkAnswers()">Submit</button>
+        </form>
+
+        <div class="message" id="congratsMessage" style="display: none;">
+            Congratulations! You answered correctly.
+        </div>
+    </div>
+
+    <script>
+        function checkAnswers() {
+            let correctCount = 0;
+            {% for question in questions %}
+                let selectedOption = document.querySelector('input[name="q{{ forloop.counter }}"]:checked');
+                if (selectedOption) {
+                    let correctAnswer = document.querySelector('input[name="correct_{{ forloop.counter }}"]').value;
+                    if (selectedOption.value === correctAnswer) {
+                        correctCount++;
+                    }
+                }
+            {% endfor %}
+
+            // Show congratulatory message if all answers are correct
+            if (correctCount === {{ questions|length }}) {
+                document.getElementById('congratsMessage').style.display = 'block';
+            } else {
+                alert('Some answers are incorrect. Try again!');
+            }
+        }
+    </script>
+</body>
+</html>

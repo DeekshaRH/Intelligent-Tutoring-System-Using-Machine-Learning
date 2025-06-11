@@ -1,0 +1,172 @@
+{% extends "education_tutor/base.html" %}
+
+{% block content %}
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2><i class="fas fa-graduation-cap"></i> Menu</h2>
+        <ul>
+            <li><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{% url 'quiz_results' %}"><i class="fas fa-chart-bar"></i> Results</a></li>
+            <li><a href="{% url 'performance' %}" class="active"><i class="fas fa-chart-line"></i> Performance</a></li>
+            <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h2>Your Performance Graphs</h2>
+
+        {% if graph_urls %}
+            <div class="graph-container">
+                {% for language, graph_data in graph_urls.items %}
+                    <h4>{{ language }}</h4>
+                    <div class="graph-wrapper" data-points='{{ graph_data.data_json|safe }}'>
+                        <img src="data:image/png;base64,{{ graph_data.url }}" alt="Performance Graph for {{ language }}" />
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="no-results">No quiz attempts yet. Take a quiz to see your performance graphs!</p>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #f0f2f5;
+    }
+
+    .container {
+        display: flex;
+    }
+
+    .sidebar {
+        width: 220px;
+        height: 100vh;
+        background: linear-gradient(180deg, #4A90E2, #357ABD);
+        color: white;
+        padding-top: 30px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+        text-align: center;
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar ul li {
+        padding: 12px;
+        text-align: center;
+    }
+
+    .sidebar ul li a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar ul li a i {
+        margin-right: 8px;
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    .main-content {
+        margin-left: 240px;
+        padding: 40px;
+        width: calc(100% - 240px);
+    }
+
+    .graph-container {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .graph-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .graph-container h4 {
+        margin-top: 20px;
+        color: #4A90E2;
+        font-size: 20px;
+    }
+
+    .no-results {
+        color: red;
+        text-align: center;
+        font-size: 18px;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    .tooltip {
+        position: absolute;
+        background: #333;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        pointer-events: none;
+        z-index: 1000;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const graphWrappers = document.querySelectorAll('.graph-wrapper');
+
+        graphWrappers.forEach(wrapper => {
+            const points = JSON.parse(wrapper.dataset.points);
+            const img = wrapper.querySelector('img');
+
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            document.body.appendChild(tooltip);
+
+            img.addEventListener('mousemove', function (e) {
+                const rect = img.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const maxAttempts = points.length;
+                const xStep = rect.width / maxAttempts;
+                const attemptIndex = Math.min(Math.floor(x / xStep), maxAttempts - 1);
+
+                if (attemptIndex >= 0 && attemptIndex < points.length) {
+                    const point = points[attemptIndex];
+                    tooltip.style.display = 'block';
+                    tooltip.textContent = `Attempt: ${point.attempt}, Score: ${point.score}, Accuracy: ${point.accuracy.toFixed(2)}%`;
+                    tooltip.style.left = `${e.pageX + 10}px`;
+                    tooltip.style.top = `${e.pageY - 10}px`;
+                }
+            });
+
+            img.addEventListener('mouseleave', function () {
+                tooltip.style.display = 'none';
+            });
+        });
+    });
+</script>
+{% endblock %}
